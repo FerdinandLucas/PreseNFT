@@ -1,0 +1,22 @@
+{
+  "name": "presenft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "preseNFT.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FerdinandLucas/PreseNFT.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FerdinandLucas/PreseNFT/issues"
+  },
+  "homepage": "https://github.com/FerdinandLucas/PreseNFT#readme",
+  "dependencies": {
+    "moralis": "^1.8.0"
+  }
+}
