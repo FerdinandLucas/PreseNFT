@@ -10,3 +10,10 @@ Moralis.start({serverUrl, appId})
 
 const collectionAddress = "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB"; //Collection Address Here
 const collectionName = "CryptoPunks"; //CollectioonName Here
+
+async function createRarity() {
+    const tokens = await Moralis.Web3API.token.getAllTokenIds({address: collectionAddress})
+    console.log(tokens);
+};
+
+createRarity();
