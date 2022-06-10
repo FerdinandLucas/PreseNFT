@@ -74,10 +74,11 @@ for (let i = 0; i < tokenTraits.length; i++) {
     }                                                                               
 }
 const collectionMeta =  Object.keys(TC)                                         // Collection attributes 
+let tokenArr = []
                                                                                 //NOW we have to start calculating the given data and get rarity scores to sort ;)
 for (let j = 0; j < meta.length; j++) {
     let now = meta[j];
-    let totalRarity = 0;
+    let totalRarity = 0;                                                         // total rarity :)))))))))))))
     for (let i = 0; i < now.length; i++) {
       let rarityScore =
         1 / (TC[now[i].trait_type][now[i].value] / collectionSize);             // number of traits, devide by collection = rarity% |  1 / rarity%  = rarity score
@@ -94,7 +95,7 @@ for (let j = 0; j < meta.length; j++) {
     value: Object.keys(now).length,
     rarityScore: numTraitsRarityScore,
     });
-      
+    totalRarity += numTraitsRarityScore;   
                                                                                 //check for absent traits
     if (now.length < collectionMeta.length) {
         let tokenAttributes = now.map((e) => e.trait_type);
@@ -102,6 +103,7 @@ for (let j = 0; j < meta.length; j++) {
             (e) => !tokenAttributes.includes(e)
         );
                                                                                 // add and calculate raritycore of missing trait
+                                                                                
        notrait.forEach((type) => {
         let absentRarity =
           1 / ((collectionSize - TC[type].counter) / collectionSize);
@@ -110,14 +112,21 @@ for (let j = 0; j < meta.length; j++) {
           value: null,
           rarityScore: absentRarity,
         });
-       
+        totalRarity += absentRarity;
       });
     }                                                                     
+                                                                                //push all data in tokenArr 
+    tokenArr.push({
+        Attributes: now,
+        Rarity: totalRarity,
+        token_id: alltokens[j].token_id,
+        image: alltokens[j].image,
+      });
     
 
    
 }
-console.log(meta[0])
+console.log(tokenArr)
 
 }
 createRarity();
