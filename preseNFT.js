@@ -73,6 +73,7 @@ for (let i = 0; i < tokenTraits.length; i++) {
       }
     }                                                                               
 }
+const collectionMeta =  Object.keys(TC)                                         // Collection attributes 
                                                                                 //NOW we have to start calculating the given data and get rarity scores to sort ;)
 for (let j = 0; j < meta.length; j++) {
     let now = meta[j];
@@ -84,21 +85,39 @@ for (let j = 0; j < meta.length; j++) {
       totalRarity += rarityScore;
     }
   
+                                                                                //Trait Count: now rarity score for how many traits a token got <
 
+        let numTraitsRarityScore =
+    8 * (1 / (TC.TraitCount[Object.keys(now).length] / collectionSize));
+    now.push({
+    trait_type: "TraitCount",
+    value: Object.keys(now).length,
+    rarityScore: numTraitsRarityScore,
+    });
+      
+                                                                                //check for absent traits
+    if (now.length < collectionMeta.length) {
+        let tokenAttributes = now.map((e) => e.trait_type);
+        let notrait = collectionMeta.filter(
+            (e) => !tokenAttributes.includes(e)
+        );
+                                                                                // add and calculate raritycore of missing trait
+       notrait.forEach((type) => {
+        let absentRarity =
+          1 / ((collectionSize - TC[type].counter) / collectionSize);
+        now.push({
+          trait_type: type,
+          value: null,
+          rarityScore: absentRarity,
+        });
+       
+      });
+    }                                                                     
+    
 
-                                                                            //now rarity score for how many traits a token got 
-
-let numTraitsRarityScore =
-8 * (1 / (TC.TraitCount[Object.keys(now).length] / collectionSize));
-now.push({
-trait_type: "TraitCount",
-value: Object.keys(now).length,
-rarityScore: numTraitsRarityScore,
-});
-totalRarity += numTraitsRarityScore;   
-
-console.log(meta[0])
+   
 }
+console.log(meta[0])
 
 }
 createRarity();
