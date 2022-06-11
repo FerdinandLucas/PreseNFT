@@ -8,9 +8,14 @@
     const appId = "xfcgOfvlPAkEiKpDWRbGuVdVejxI3UyNvitEhKLP";                   //Moralis Server App ID here
 
 Moralis.start({serverUrl, appId})
-
+                                                                                //https://forum.moralis.io/t/help-understanding-link/3707
+    const resolveLink = (url) => {
+    if (!url || !url.includes("ipfs://")) return url;
+    return url.replace("ipfs://", "https://gateway.ipfs.io/ipfs/");
+    };
+  
     const collectionAddress = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d";     //Collection Address Here
-    const collectionName = "CryptoPunks";                                       //CollectioonName Here
+    const collectionName = "BAYC";                                       //CollectioonName Here
 
 async function createRarity() {
     const tokens = await Moralis.Web3API.token.getAllTokenIds({address: collectionAddress})
@@ -23,23 +28,24 @@ async function createRarity() {
     let alltokens = tokens.result                                               //All data
 
     /* const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-    for (let i = pageSize; i < collectionSize; i = i + pageSize) {
+    for (let i =0; i < pageSize; i++) {
         const tokens = await Moralis.Web3API.token.getAllTokenIds({   
           address: collectionAddress, });                                       //Loop through all the Nfts in the Api
         while (tokens.next){
             result = await tokens.next() //https://docs.moralis.io/moralis-dapp/web3-api#web3-api-pagination-examples-with-.next
             //console.log(tokens)
+            
         }
         alltokens = alltokens.concat(tokens.result);
-        await timer(8000);
-    } */
-
+        await timer(9000);
+    } 
+    */
 
     let meta = alltokens.map((e) => JSON.parse(e.metadata).attributes);
 
     let TC = { TraitCount: {} }; 
                                                                                 //Map throug x element of meta data, calculate traits type & value and count traits 
-for (let j = 0; j < meta.length; j++) {
+    for (let j = 0; j < meta.length; j++) {
       let tokenTraits = meta[j].map((e) => e.trait_type);
       let nftValues = meta[j].map((e) => e.value);
   
@@ -53,7 +59,7 @@ for (let j = 0; j < meta.length; j++) {
                                                                                 // --> We khow how many nfts have a diffrent amount of traits 
                                                                                 //Now we need to find out which are how often indivual traits occure in the token collection 
                                                                                 //Another forloop to loop through each nft and add the counter to TC
-for (let i = 0; i < tokenTraits.length; i++) {
+    for (let i = 0; i < tokenTraits.length; i++) {
     let now = tokenTraits[i];
     if (TC[now]) {
       TC[now].counter++;
@@ -65,18 +71,18 @@ for (let i = 0; i < tokenTraits.length; i++) {
                                                                                 // for example: now we know 10000 out of 10000 tokens have background trait, 
                                                                                 // but we wanna know how many each red, white, grey... background traits there are
 
-  let nowValue = nftValues[i];
+    let nowValue = nftValues[i];
       if (TC[now][nowValue]) {
         TC[now][nowValue]++;
       } else {
         TC[now][nowValue] = 1;
       }
     }                                                                               
-}
-const collectionMeta =  Object.keys(TC)                                         // Collection attributes 
-let tokenArr = []
+    }
+    const collectionMeta =  Object.keys(TC)                                      // Collection attributes 
+    let tokenArr = []
                                                                                 //NOW we have to start calculating the given data and get rarity scores to sort ;)
-for (let j = 0; j < meta.length; j++) {
+    for (let j = 0; j < meta.length; j++) {
     let now = meta[j];
     let totalRarity = 0;                                                         // total rarity :)))))))))))))
     for (let i = 0; i < now.length; i++) {
@@ -114,19 +120,56 @@ for (let j = 0; j < meta.length; j++) {
         });
         totalRarity += absentRarity;
       });
-    }                                                                     
-                                                                                //push all data in tokenArr 
+    } 
+                                                                                //https://forum.moralis.io/t/rarity-ranking-nft-error/6901/5
+    if (alltokens[j].metadata) {
+        alltokens[j].metadata = JSON.parse(alltokens[j].metadata);
+        alltokens[j].image = resolveLink(alltokens[j].metadata.image);
+      } else if (alltokens[j].token_uri) {
+        try {
+          await fetch(alltokens[j].token_uri)
+            .then((response) => response.json())
+            .then((data) => {
+              alltokens[j].image = resolveLink(data.image);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }                                                                    
+                                                                                    //push all data in tokenArr 
     tokenArr.push({
         Attributes: now,
         Rarity: totalRarity,
         token_id: alltokens[j].token_id,
         image: alltokens[j].image,
       });
-    
+
+                                                                                    
 
    
 }
-console.log(tokenArr)
 
+tokenArr.sort((a, b) => b.Rarity - a.Rarity);                                       //SORT THAT STUFFFFFFFFFFFFFFFFFFFFFFFFFFFF, YeaaaaaaaaaaaBUDDDYYYYYYY
+
+
+                                                                                    //Put it in data base       
+for (let i = 0; i < tokenArr.length; i++) {
+
+    tokenArr[i].Rank = i + 1;
+    const newClass = Moralis.Object.extend(collectionName);
+    const newObject = new newClass();
+
+    newObject.set("attributes", tokenArr[i].Attributes);
+    newObject.set("rarity", tokenArr[i].Rarity);
+    newObject.set("tokenId", tokenArr[i].token_id);
+    newObject.set("rank", tokenArr[i].Rank);
+    newObject.set("image", tokenArr[i].image);
+
+    await newObject.save();
+    console.log(i);
+  }
+  
+  return true
 }
+
 createRarity();

@@ -11,9 +11,9 @@ Here we gooo;)
 - It will give you a Server Url and Application ID.
 
 - Implement and call in preseNFT.js :
-    const serverUrl = ""; //Moralis Server Url here
-    const appId = ""; //Moralis Server App ID here
-    const collectionAddress = ""; //Collection Address Here
-    const collectionName = ""; //CollectioonName Here
+    - const serverUrl = ""; //Moralis Server Url here
+    - const appId = ""; //Moralis Server App ID here
+    - const collectionAddress = ""; //Collection Address Here
+    - const collectionName = ""; //CollectioonName Here
 
 
