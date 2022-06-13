@@ -1,7 +1,7 @@
 
 // Heyy there, welcome to the Rarity logic behind PreseNFT :))
 // Start: Implementing moralis and connecting to Api and getting raw Collection metadata.
-//
+//https://docs.moralis.io/moralis-dapp/connect-the-sdk/connect-with-js
 
     const Moralis = require('moralis/node')
     const serverUrl = "https://aizve2ka1w9x.usemoralis.com:2053/server";        //Moralis Server Url here
@@ -14,8 +14,8 @@ Moralis.start({serverUrl, appId})
     return url.replace("ipfs://", "https://gateway.ipfs.io/ipfs/");
     };
   
-    const collectionAddress = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d";     //Collection Address Here
-    const collectionName = "BAYC";                                       //CollectioonName Here
+    const collectionAddress = "0x34d85c9CDeB23FA97cb08333b511ac86E1C4E258";     //Collection Address Here
+    const collectionName = "TOS";                                              //CollectioonName Here
 
 async function createRarity() {
     const tokens = await Moralis.Web3API.token.getAllTokenIds({address: collectionAddress})
