@@ -14,8 +14,8 @@ Moralis.start({serverUrl, appId})
     return url.replace("ipfs://", "https://gateway.ipfs.io/ipfs/");
     };
   
-    const collectionAddress = "0x34d85c9CDeB23FA97cb08333b511ac86E1C4E258";     //Collection Address Here
-    const collectionName = "TOS";                                              //CollectioonName Here
+    const collectionAddress = "0xbCe3781ae7Ca1a5e050Bd9C4c77369867eBc307e";     //Collection Address Here
+    const collectionName = "Goblin";                                              //CollectioonName Here
 
 async function createRarity() {
     const tokens = await Moralis.Web3API.token.getAllTokenIds({address: collectionAddress})
