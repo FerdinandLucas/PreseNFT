@@ -29,7 +29,7 @@ const styles = {
     alignItems: "center",
     fontFamily: "Roboto, sans-serif",
     borderBottom: "2px solid rgba(0, 0, 0, 0.06)",
-    padding: "0 10px",
+    padding: "0 20px",
     boxShadow: "0 1px 10px rgb(151 164 175 / 10%)",
   },
 };
@@ -45,10 +45,10 @@ const App = ({ isServerInfo }) => {
     <Layout style={{ height: "100vh", overflow: "auto" }}>
       <Router>
         <Header style={styles.header}>
-          <div style={{width:"250px"}}>
+          <div style={{width:"50px"}}>
           
           </div>
-          <img src={logo} alt="" style={{height:"100px"}}/>
+          <img src={logo} alt="" style={{height:"70px"}}/>
           <div style={{display:"flex"}}>
           </div>
         </Header>

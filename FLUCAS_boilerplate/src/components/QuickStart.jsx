@@ -104,7 +104,8 @@ function HomePage() {
           >
             <Option value="BAYC"> BAYC </Option> 
             <Option value="CryptoPunks"> CryptoPunks</Option> 
-            <Option value="TOS"> TOS</Option> 
+            <Option value="TOS"> TOS</Option>
+            <Option value="Goblin"> Goblin </Option>
 
           </Select>
           <Search

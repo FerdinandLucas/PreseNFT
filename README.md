@@ -1,5 +1,6 @@
 # PreseNFT
 Greetings and welcome to my NFT rarity-ranker!
+https://www.youtube.com/watch?app=desktop&v=8rQyKd6Tub4&cbrd=1
 Since I am using a new tool/ framework, I will document here my journey for future understanding.
 Here we gooo;)
 
